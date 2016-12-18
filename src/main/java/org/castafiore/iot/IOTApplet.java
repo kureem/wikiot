@@ -4,7 +4,7 @@ import java.util.Collection;
 
 /**
  * An {@link IOTApplet} is a logical application that allows interaction with {@link Device}s.<br>
- * The Applet is give access to the {@link DeviceRegistry} to load {@link Device}s.<br> 
+ * The Applet  is give access to the {@link DeviceRegistry} to load {@link Device}s.<br> 
  * 
  * @author Kureem Rossaye
  *
