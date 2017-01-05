@@ -17,17 +17,10 @@
 
 package org.castafiore.utils;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
-import org.castafiore.ui.Container;
-import org.castafiore.ui.Event;
-import org.castafiore.ui.JQuery;
-import org.castafiore.ui.UIException;
 
 
 /**
@@ -131,98 +124,6 @@ event.type.21=ready
 	}
 	
 	
-	@SuppressWarnings({ "rawtypes", "serial" })
-	public static Event getEvent(final String methodName, final Class ancestor, final Class ancestorToMask){
-		Event event = new Event(){
-
-			
-			public void ClientAction(JQuery container) {
-				if(ancestorToMask != null){
-					container.mask(container.getAncestorOfType(ancestorToMask));
-				}else{
-					container.mask();
-				}
-				container.server(this);
-				
-			}
-
-			
-			@SuppressWarnings("unchecked")
-			public boolean ServerAction(Container container,
-					Map<String, String> request) throws UIException {
-				try{
-					
-					//String clazz = container.getAttribute("ancestor");
-					//Class<Container> cls = (Class<Container>) Thread.currentThread().getContextClassLoader().loadClass(ancestor);
-					Object panel = container.getAncestorOfType(ancestor);
-					Method method = null;
-					try{
-						method = panel.getClass().getMethod(methodName, Container.class);
-						method.invoke(panel, container);
-					}catch(NoSuchMethodException nse){
-						Class cls = panel.getClass(); 
-						Method m = cls.getMethod(methodName);
-						m.invoke(panel);
-					}
-					
-				}catch(Exception e){
-					throw new UIException(e);
-				}
-				
-				return true;
-			}
-
-			
-			public void Success(JQuery container,
-					Map<String, String> request) throws UIException {
-				
-			}
-			
-		};
-		return event;
-	}
-	
-	@SuppressWarnings("serial")
-	public final static Event GENERIC_FORM_METHOD_EVENT = new Event(){
-		
-		
-
-		public void ClientAction(JQuery container) {
-			container.mask();
-			container.server(this);
-			
-		}
-
-		@SuppressWarnings("unchecked")
-		public boolean ServerAction(Container container,
-				Map<String, String> request) throws UIException {
-			
-			try{
-				String methodName = container.getAttribute("method");
-				String clazz = container.getAttribute("ancestor");
-				Class<Container> cls = (Class<Container>) Thread.currentThread().getContextClassLoader().loadClass(clazz);
-				Object panel = container.getAncestorOfType(cls);
-				Method method = null;
-				try{
-					method = panel.getClass().getMethod(methodName, Container.class);
-					method.invoke(panel, container);
-				}catch(NoSuchMethodException nse){
-					panel.getClass().getMethod(methodName).invoke(panel);
-				}
-				
-			}catch(Exception e){
-				throw new UIException(e);
-			}
-			
-			return true;
-		}
-
-		public void Success(JQuery container, Map<String, String> request)
-				throws UIException {
-			
-		}
-		
-	};
 	
 
 }

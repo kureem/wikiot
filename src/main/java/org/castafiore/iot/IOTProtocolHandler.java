@@ -72,7 +72,7 @@ public abstract class IOTProtocolHandler extends TextWebSocketHandler {
 
 				DeviceDefinition definition = mapper.readValue(request.getBody(), DeviceDefinition.class);
 				Device device = getRegistry().associate(deviceId, definition);
-				logger.info("device registered:{" + device.getDeviceId() + "," + device.getName() + "}");
+				logger.info("device registered:{" + device.getDeviceId() + "," + device.getDefinition().getId() + "}");
 				device.connect(session);
 
 				for (IOTApplet applet : getApplets()) {

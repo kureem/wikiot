@@ -19,7 +19,7 @@
 import java.util.List;
 
 import org.castafiore.InvalidLayoutDataException;
-import org.castafiore.ui.ex.layout.DroppableSection;
+import org.castafiore.ui.layout.DroppableSection;
 
 /**
  * this class represents a container where we can add and retrieve children according a to a layout

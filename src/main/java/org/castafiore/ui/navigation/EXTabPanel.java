@@ -19,13 +19,11 @@ package org.castafiore.ui.navigation;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.castafiore.JQContants;
 import org.castafiore.ui.Container;
-import org.castafiore.ui.Event;
-import org.castafiore.ui.ex.EXContainer;
+import org.castafiore.ui.EXContainer;
 import org.castafiore.utils.ComponentUtil;
 
-public class EXTabPanel extends EXContainer implements JQContants, TabPanel {
+public class EXTabPanel extends EXContainer implements  TabPanel {
 
 	/**
 	 * 
@@ -111,7 +109,7 @@ public class EXTabPanel extends EXContainer implements JQContants, TabPanel {
 			tabs.addChild(tab);
 			tab.setAttribute("t", i + "");
 			tab.setAttribute("init", "false");
-			tab.addEvent(EVT_SHOW_TAB, Event.CLICK);
+			//tab.addEvent(EVT_SHOW_TAB, Event.CLICK);
 
 			Container content = ComponentUtil.getContainer("c-" + i, "div", "",
 					null).addClass("tab-pane");

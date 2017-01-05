@@ -2,30 +2,31 @@ package org.castafiore.web;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections.map.ListOrderedMap;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.castafiore.ComponentNotFoundException;
 import org.castafiore.Constant;
 import org.castafiore.ui.Application;
 import org.castafiore.ui.ApplicationRegistry;
 import org.castafiore.ui.CastafioreApplicationContextHolder;
-import org.castafiore.ui.CastafioreUIEngine;
+import org.castafiore.ui.CastafioreJSONEngine;
+import org.castafiore.ui.Data;
 import org.castafiore.ui.interceptors.InterceptorRegistry;
 import org.castafiore.utils.ComponentUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class CastafioreController {
 	
 	@Autowired
@@ -80,19 +81,19 @@ public class CastafioreController {
 	
 	}
 	
-	private CastafioreUIEngine getEngine(HttpServletRequest req){
-		CastafioreUIEngine engine = (CastafioreUIEngine)req.getSession().getAttribute("CastafioreEngine");
+	private CastafioreJSONEngine getEngine(HttpServletRequest req){
+		CastafioreJSONEngine engine = (CastafioreJSONEngine)req.getSession().getAttribute("CastafioreEngine");
 		if(engine == null){
-			engine = new CastafioreUIEngine(interceptorRegistry);
+			engine = new CastafioreJSONEngine(interceptorRegistry);
 			req.getSession().setAttribute("CastafioreEngine", engine);
-			return (CastafioreUIEngine)req.getSession().getAttribute("CastafioreEngine");
+			return (CastafioreJSONEngine)req.getSession().getAttribute("CastafioreEngine");
 		}else{
 			return engine;
 		}
 	}
 	
-	@RequestMapping("/castafiore/*")
-	public void doService(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping("/castafiore/ui/*")
+	public Object doService(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		 
 		boolean isMultipart = ServletFileUpload.isMultipartContent((HttpServletRequest)request);
@@ -124,12 +125,14 @@ public class CastafioreController {
 			//gets the already loaded application
 			Application applicationInstance = CastafioreApplicationContextHolder.getCurrentApplication();
 			String script = "";
-
+			boolean isAjax = true;
+			List<Data> res = new LinkedList<Data>();
 			if((componentId == null && eventId == null && applicationInstance != null))
 			{ 
 				applicationInstance.setRendered(false);
-				script = getEngine(request).getJQuery(applicationInstance, "root_" + applicationId , applicationInstance, new ListOrderedMap());
-				script = script + "hideloading();";
+				 getEngine(request).getJQuery(applicationInstance, "root_" + applicationId , applicationInstance, res);
+				//script = script + "hideloading();";
+				isAjax = false;
 				
 			}
 			else if((componentId != null && eventId != null)&& applicationInstance != null){	
@@ -137,8 +140,8 @@ public class CastafioreController {
 					//logger.debug("executing server action: componentId:" + componentId + " applicationid:" + applicationId);
 				try{
 					//long start = System.currentTimeMillis();
-					script = getEngine(request).executeServerAction(componentId,  applicationInstance, "root_" + applicationId, params);
-					script = script + "hideloading();";
+					getEngine(request).executeServerAction(componentId,  applicationInstance, "root_" + applicationId, params,res);
+					//script = script + "hideloading();";
 				}catch(ComponentNotFoundException cnfe){
 					script = "window.location.reload( false );";
 				}
@@ -148,31 +151,23 @@ public class CastafioreController {
 				script = "alert('Your session has expired. Browser will refresh');window.location.reload( false );";
 			}
 			
-			Set<String> requiredScript = applicationInstance.getBufferedResources();
-			if(requiredScript != null && requiredScript.size() > 0)
-			{
-				StringBuilder reqScript = new StringBuilder();
-				reqScript.append(Constant.NO_CONFLICT+ ".plugin('"+applicationInstance.getId()+"',{").append("files:[");
-				int scount = 0;
-				for(String s : requiredScript)
-				{
-					reqScript.append("'").append(s).append("'");
-					scount++;
-					if(scount < requiredScript.size())
-					{
-						reqScript.append(",");
-					}
-				}
-				reqScript.append("],").append("selectors:['"+Constant.ID_PREF+"root_"+applicationId+"'],");
-				reqScript.append("callback:function(){").append(script).append("}").append("});");
-				reqScript.append(Constant.NO_CONFLICT + ".plugin('"+applicationInstance.getId()+"').get();");
-				script = reqScript.toString();
-			}
+			
 			applicationInstance.flush(12031980);
 			//script =  Constant.NO_CONFLICT +"(document).ready(function(){" + script + "});";
-			script ="<script>" + Constant.NO_CONFLICT +"(document).ready(function(){" + script + "});</script>";
+			script ="<script>" + Constant.NO_CONFLICT +"(document).ready(function(){$('<div id=\""+"root_" + applicationId+"\"></div>').appendTo('body');" + script + "});</script>";
+			if(!isAjax){
+				//request.setAttribute("script", script);
+				//return IOUtil.getStreamContentAsString(Thread.currentThread().getContextClassLoader().getResourceAsStream("static/templates/index.ftl")).replace("${script}", script);
+				//return "../../templates/index.ftl";
+				//return applicationInstance;
+			}else{
+				//return applicationInstance;
+				
+			}
+			return res;
 			
 		}
+		return null;
 	}
 	
 	

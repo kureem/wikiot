@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.map.ListOrderedMap;
-import org.castafiore.KeyValuePair;
+import org.castafiore.KeyValue;
 import org.castafiore.ui.JQuery;
 import org.castafiore.utils.JavascriptUtil;
 
@@ -48,9 +48,9 @@ public  class JSMap implements JSObject, Serializable {
 	}
 	
 	
-	public JSMap putAll(String key,List<KeyValuePair> pairs){
+	public JSMap putAll(String key,List<KeyValue> pairs){
 		JSMap map  = new JSMap();
-		for(KeyValuePair kv : pairs){
+		for(KeyValue kv : pairs){
 			
 			map.put(kv);
 		}
@@ -59,7 +59,7 @@ public  class JSMap implements JSObject, Serializable {
 		return this;
 	}
 	
-	public JSMap put(KeyValuePair kv){
+	public JSMap put(KeyValue kv){
 		put(kv.getKey(), kv.getValue());
 		return this;
 	}

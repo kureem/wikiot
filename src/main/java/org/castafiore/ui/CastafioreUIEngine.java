@@ -26,13 +26,12 @@ import java.util.Set;
 import org.apache.commons.collections.map.ListOrderedMap;
 import org.castafiore.ComponentNotFoundException;
 import org.castafiore.Constant;
-import org.castafiore.ui.ex.EXApplication;
-import org.castafiore.ui.ex.layout.TemplateComponent;
-import org.castafiore.ui.ex.panel.EXWarning;
 import org.castafiore.ui.interceptors.Interceptor;
 import org.castafiore.ui.interceptors.InterceptorRegistry;
 import org.castafiore.ui.js.JSMap;
 import org.castafiore.ui.js.JSVar;
+import org.castafiore.ui.layout.TemplateComponent;
+import org.castafiore.ui.panel.EXWarning;
 import org.castafiore.utils.ComponentUtil;
 import org.castafiore.utils.EventUtil;
 
@@ -83,35 +82,12 @@ public final class CastafioreUIEngine {
 		
 		if(!container.rendered())
 		{
-			//Container parent = container.getParent();
-//			if(parent ==null){
-//				container.setAttribute("__path", "0");
-//			}else{
-//				
-//				container.setAttribute("__path", parent.getAttribute("__path") + "/" + parent.getChildren().indexOf(container));
-//			}
-			
 			
 			if(container instanceof FormInput)
 			{
 				container.setAttribute("stf", "true");
 			}
-			/*if(container instanceof EXUpload)
-			{
-				EXHidden applicationid = new EXHidden("casta_applicationid",root.getName());
-				container.addChild(applicationid);
-				
-				EXHidden componentId = new EXHidden("casta_componentid",container.getId());
-				container.addChild(applicationid);
-				container.addChild(componentId);
-			}*/
-			
-	
-			
-			
-			
-			
-			//InterceptorRegistry interceptorRegistry = BaseSpringUtil.getBean("castafioreInterceptorRegistry");
+
 			
 			Interceptor[] interceptors = interceptorRegistry.getInterceptors(container);
 			

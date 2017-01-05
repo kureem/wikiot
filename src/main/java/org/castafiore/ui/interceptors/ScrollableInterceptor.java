@@ -5,7 +5,6 @@ import java.util.Map;
 import org.castafiore.ui.Container;
 import org.castafiore.ui.Event;
 import org.castafiore.ui.JQuery;
-import org.castafiore.ui.Scrollable;
 import org.castafiore.ui.UIException;
 import org.springframework.stereotype.Component;
 

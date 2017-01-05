@@ -30,11 +30,11 @@ import org.castafiore.ui.Application;
 import org.castafiore.ui.ApplicationRegistry;
 import org.castafiore.ui.CastafioreApplicationContextHolder;
 import org.castafiore.ui.Container;
+import org.castafiore.ui.EXContainer;
 import org.castafiore.ui.FormInput;
 import org.castafiore.ui.UIException;
 import org.castafiore.ui.WebServletAwareApplication;
-import org.castafiore.ui.ex.EXContainer;
-import org.castafiore.ui.ex.panel.EXPanel;
+import org.castafiore.ui.panel.EXPanel;
 
 /**
  * 
@@ -211,6 +211,8 @@ public class ComponentUtil {
 					throw new ServletException(
 							"The application Id configured in application-registry should be the same as the application name.");
 				}
+				
+				request.getSession().setAttribute(applicationId, application);
 
 				// isnew = true;
 

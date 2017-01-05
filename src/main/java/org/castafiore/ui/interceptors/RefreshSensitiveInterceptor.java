@@ -17,7 +17,6 @@
  package org.castafiore.ui.interceptors;
 
 import org.castafiore.ui.Container;
-import org.castafiore.ui.RefreshSentive;
 import org.springframework.stereotype.Component;
 
 @Component

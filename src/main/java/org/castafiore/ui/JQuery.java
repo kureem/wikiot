@@ -26,9 +26,8 @@ import java.util.Map;
 
 import org.apache.commons.collections.map.ListOrderedMap;
 import org.castafiore.Constant;
-import org.castafiore.KeyValuePair;
-import org.castafiore.SimpleKeyValuePair;
-import org.castafiore.ui.ex.layout.TemplateComponent;
+import org.castafiore.KeyValue;
+import org.castafiore.SimpleKeyValue;
 import org.castafiore.ui.js.Ajax;
 import org.castafiore.ui.js.Expression;
 import org.castafiore.ui.js.JSFunction;
@@ -36,6 +35,7 @@ import org.castafiore.ui.js.JSArray;
 import org.castafiore.ui.js.JSMap;
 import org.castafiore.ui.js.JSObject;
 import org.castafiore.ui.js.JSVar;
+import org.castafiore.ui.layout.TemplateComponent;
 import org.castafiore.utils.JavascriptUtil;
 import org.castafiore.utils.StringUtil;
 import org.springframework.util.Assert;
@@ -65,7 +65,7 @@ public final class JQuery implements Constant {
 
 	private Container container_;
 
-	private List<KeyValuePair> commands;
+	private List<KeyValue> commands;
 	private ListOrderedMap buffer = null;
 
 	private final static String NL = "\n";
@@ -86,9 +86,9 @@ public final class JQuery implements Constant {
 
 		this.selector = selector;
 		String idref = getIdRef();
-		this.commands = (List<KeyValuePair>) buffer.get(idref);
+		this.commands = (List<KeyValue>) buffer.get(idref);
 		if (commands == null) {
-			commands = new LinkedList<KeyValuePair>();
+			commands = new LinkedList<KeyValue>();
 			buffer.put(idref, commands);
 		}
 		this.buffer = buffer;
@@ -100,7 +100,7 @@ public final class JQuery implements Constant {
 
 		this.buffer = new ListOrderedMap();
 
-		commands = new LinkedList<KeyValuePair>();
+		commands = new LinkedList<KeyValue>();
 		buffer.put(getIdRef(), commands);
 
 	}
@@ -118,7 +118,7 @@ public final class JQuery implements Constant {
 
 		this.buffer = new ListOrderedMap();
 
-		commands = new LinkedList<KeyValuePair>();
+		commands = new LinkedList<KeyValue>();
 		buffer.put(getIdRef(), commands);
 
 	}
@@ -148,9 +148,9 @@ public final class JQuery implements Constant {
 			buffer = new ListOrderedMap();
 		}
 		this.container_ = container;
-		this.commands = (List<KeyValuePair>) buffer.get(getIdRef());
+		this.commands = (List<KeyValue>) buffer.get(getIdRef());
 		if (commands == null) {
-			commands = new ArrayList<KeyValuePair>(10);
+			commands = new ArrayList<KeyValue>(10);
 			buffer.put(getIdRef(), commands);
 		}
 		this.buffer = buffer;
@@ -219,7 +219,7 @@ public final class JQuery implements Constant {
 		Iterator selectors = buffer.keyList().iterator();
 		while (selectors.hasNext()) {
 			String selector = selectors.next().toString();
-			List<KeyValuePair> cmds = (List<KeyValuePair>) buffer.get(selector);
+			List<KeyValue> cmds = (List<KeyValue>) buffer.get(selector);
 
 			builder.append(JQuery.getCurrentJQuery_(cmds, selector));
 		}
@@ -266,7 +266,7 @@ public final class JQuery implements Constant {
 	 * @return
 	 */
 	public JQuery eval(String fragment) {
-		SimpleKeyValuePair kv = new SimpleKeyValuePair();
+		SimpleKeyValue kv = new SimpleKeyValue();
 		kv.setKey("js");
 		kv.setValue(fragment);
 		commands.add(kv);
@@ -428,7 +428,7 @@ public final class JQuery implements Constant {
 	 * @return
 	 */
 	public JQuery effect(String name, JSMap options, int speed) {
-		KeyValuePair kv = makeKeyValuePair("effect", name, options, speed);
+		KeyValue kv = makeKeyValuePair("effect", name, options, speed);
 
 		commands.add(kv);
 		return this;
@@ -633,8 +633,8 @@ public final class JQuery implements Constant {
 		return result;
 	}
 
-	private static KeyValuePair makeKeyValuePair(String methodname, String[] params) {
-		SimpleKeyValuePair kv = new SimpleKeyValuePair();
+	private static KeyValue makeKeyValuePair(String methodname, String[] params) {
+		SimpleKeyValue kv = new SimpleKeyValue();
 
 		kv.setKey(methodname);
 
@@ -643,25 +643,25 @@ public final class JQuery implements Constant {
 		return kv;
 	}
 
-	private static KeyValuePair makeKeyValuePair(String methodname, Object... params) {
+	private static KeyValue makeKeyValuePair(String methodname, Object... params) {
 
 		String result = JavascriptUtil.generateJS(params);
 
-		SimpleKeyValuePair kv = new SimpleKeyValuePair();
+		SimpleKeyValue kv = new SimpleKeyValue();
 		kv.setKey(methodname);
 		kv.setValue(result);
 		return kv;
 	}
 
-	private static KeyValuePair makeKeyValuePair(String methodname, String componentId) {
-		SimpleKeyValuePair kv = new SimpleKeyValuePair();
+	private static KeyValue makeKeyValuePair(String methodname, String componentId) {
+		SimpleKeyValue kv = new SimpleKeyValue();
 		kv.setKey(methodname);
 		kv.setValue(Constant.NO_CONFLICT + "(\"" + ID_PREF + componentId + "\")");
 		return kv;
 	}
 
-	private static KeyValuePair makeKeyValuePair(String methodname, JQuery jquery) {
-		SimpleKeyValuePair kv = new SimpleKeyValuePair();
+	private static KeyValue makeKeyValuePair(String methodname, JQuery jquery) {
+		SimpleKeyValue kv = new SimpleKeyValue();
 		kv.setKey(methodname);
 		kv.setValue(Constant.NO_CONFLICT + "(\"" + jquery.getIdRef() + "\")");
 		return kv;
@@ -959,7 +959,7 @@ public final class JQuery implements Constant {
 		String js = jquery.getCompleteJQuery();
 
 		if (StringUtil.isNotEmpty(js)) {
-			SimpleKeyValuePair kv = new SimpleKeyValuePair();
+			SimpleKeyValue kv = new SimpleKeyValue();
 			kv.setKey(eventName);
 			kv.setValue("function (event) {" + NL + jquery.getCompleteJQuery() + NL + "}");
 			this.commands.add(kv);
@@ -967,7 +967,7 @@ public final class JQuery implements Constant {
 	}
 
 	public void on(String eventName, String javascript) {
-		SimpleKeyValuePair kv = new SimpleKeyValuePair();
+		SimpleKeyValue kv = new SimpleKeyValue();
 		kv.setKey(eventName);
 		kv.setValue("function (event) {" + NL + javascript + NL + "}");
 		this.commands.add(kv);
@@ -1097,13 +1097,13 @@ public final class JQuery implements Constant {
 
 	public JQuery resizeable(JSMap options) {
 		// container_.addScript(ResourceUtil.getJavascriptURL("jquery/ui.resizable.js"));
-		KeyValuePair kv = makeKeyValuePair("resizable", options);
+		KeyValue kv = makeKeyValuePair("resizable", options);
 		this.commands.add(kv);
 		return this;
 	}
 
 	public JQuery animate(JSMap options, String duration, String easing) {
-		KeyValuePair kv = null;
+		KeyValue kv = null;
 		if (easing != null)
 			kv = makeKeyValuePair("animate", options, duration, easing);
 		else
@@ -1114,7 +1114,7 @@ public final class JQuery implements Constant {
 	}
 
 	public JQuery animate(JSMap options, String duration, String easing, JQuery callback) {
-		KeyValuePair kv = null;
+		KeyValue kv = null;
 		if (easing != null)
 			kv = makeKeyValuePair("animate", options, duration, easing, callback);
 		else
@@ -1128,7 +1128,7 @@ public final class JQuery implements Constant {
 		return getCurrentJQuery_(commands, getIdRef());
 	}
 
-	public static String getCurrentJQuery_(List<KeyValuePair> commands, String idRef) {
+	public static String getCurrentJQuery_(List<KeyValue> commands, String idRef) {
 		StringBuilder builder = new StringBuilder();
 
 		String result = "";
@@ -1137,7 +1137,7 @@ public final class JQuery implements Constant {
 
 			boolean previousWasFragment = true;
 			String dot = ".";
-			for (KeyValuePair kv : commands) {
+			for (KeyValue kv : commands) {
 
 				if (kv != null) {
 					if (kv.getKey().equalsIgnoreCase("js")) {
@@ -1219,16 +1219,6 @@ public final class JQuery implements Constant {
 		return server(null, optionalParams, evt, confirm);
 	}
 
-	@Deprecated
-	public JQuery makeServerRequest(String ancestorId, Event evt) {
-		return server(ancestorId, null, evt, null);
-	}
-
-	@Deprecated
-	public JQuery makeServerRequest(String ancestorId, JSMap optionalParams, Event evt) {
-		return this.server(ancestorId, optionalParams, evt, null);
-
-	}
 
 	public JQuery server(String ancestorId, JSMap optionalParams, Event evt, String confirm) {
 		JSMap params = new JSMap();
@@ -1260,7 +1250,7 @@ public final class JQuery implements Constant {
 		if (optionalParams != null)
 			params.putAll(optionalParams);
 
-		String fragment = "sCall(" + params.getJavascript() + ")";
+		String fragment = "Castafiore.server(" + params.getJavascript() + ")";
 		if (confirm != null && confirm.length() > 0) {
 			fragment = "if(confirm('" + JavascriptUtil.javaScriptEscape(confirm) + "')){" + fragment + "};";
 		}

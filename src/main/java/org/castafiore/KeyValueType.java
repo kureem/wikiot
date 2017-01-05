@@ -1,6 +1,6 @@
 package org.castafiore;
 
-public interface KeyValueType extends KeyValuePair{
+public interface KeyValueType extends KeyValue{
 	
 	public Types getType();
 

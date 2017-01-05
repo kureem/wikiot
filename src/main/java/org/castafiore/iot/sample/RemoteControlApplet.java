@@ -5,20 +5,20 @@ import java.util.Map;
 import org.castafiore.iot.Device;
 import org.castafiore.iot.EventListener;
 import org.castafiore.iot.websocket.GenericIOTApplet;
- 
+import org.springframework.stereotype.Component;
+
+@Component
 public class RemoteControlApplet extends GenericIOTApplet {
 
 	public RemoteControlApplet(){
-		//add the required devices to be used
-		addRequiredDevice("MyLamp");
-		addRequiredDevice("MyRemote");
-		
+		addRequiredDevice("ctr.0.0", "0");
+		addRequiredDevice("sw.0.0", "1");		
 	}
 
 	@Override
 	public void initDevice(Device device) {
 		//when device is first initialised, we add the listener for the 2 events on the remote control
-		if(device.getDeviceId().equals("MyRemote")){
+		if(device.getDeviceId().equals("0")){
 			device.addEvent(new OnSwitchOn(), "OnSwitchOn");
 			device.addEvent(new OnSwitchOff(), "OnSwitchOff");
 		}
@@ -36,7 +36,7 @@ public class RemoteControlApplet extends GenericIOTApplet {
 		public void execute(Device source, String type,
 				Map<String, String> parameters) {
 			//finds the device and invoke the SwitchOn function
-			findDevice("MyLamp").invoke("SwitchOn");
+			findDevice("1").invoke("SwitchOn");
 			
 		}
 		
@@ -47,8 +47,8 @@ public class RemoteControlApplet extends GenericIOTApplet {
 		@Override
 		public void execute(Device source, String type,	Map<String, String> parameters) {
 			
-			//finds the Lamp device and invokes the SwitchOff event
-			findDevice("MyLamp").invoke("SwitchOff");
+			//finds the device and invokes the SwitchOff event
+			findDevice("1").invoke("SwitchOff");
 			
 		}
 		

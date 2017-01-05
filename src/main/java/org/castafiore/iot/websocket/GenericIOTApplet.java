@@ -1,20 +1,22 @@
 package org.castafiore.iot.websocket;
 
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.castafiore.iot.Device;
 import org.castafiore.iot.DeviceRegistry;
 import org.castafiore.iot.IOTApplet;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract  class GenericIOTApplet implements IOTApplet {
 
+	@Autowired
 	private DeviceRegistry registry;
 
-	private List<String> devices = new LinkedList<String>();
+	private Map<String, String> devices = new LinkedHashMap<String,String>();
 
-	private List<String> connectedDevices = new LinkedList<String>();
+	private Map<String, String> connectedDevices = new LinkedHashMap<String,String>();
 
 	@Override
 	public DeviceRegistry getRegistry() {
@@ -25,19 +27,20 @@ public abstract  class GenericIOTApplet implements IOTApplet {
 		this.registry = registry;
 	}
 
-	public IOTApplet addRequiredDevice(String deviceId) {
+	public IOTApplet addRequiredDevice(String definitionId, String deviceId) {
 
-		if (!devices.contains(deviceId)) {
-			devices.add(deviceId);
+		if (!devices.containsKey(deviceId)) {
+			devices.put(deviceId,definitionId);
+		}else{
+			throw new RuntimeException("There is already a device with id:" + deviceId + " Please choose another Id");
 		}
 		return this;
 	}
 
-	public Device findDevice(String deviceId) {
-		for (String d : connectedDevices) {
-			if (d.equals(deviceId)) {
-				return getRegistry().getDevice(deviceId);
-			}
+	public Device findDevice(String Id) {
+		//check if device is connected first
+		if(connectedDevices.containsKey(Id)){
+			return getRegistry().getDevice(Id);
 		}
 		return null;
 	}
@@ -57,7 +60,7 @@ public abstract  class GenericIOTApplet implements IOTApplet {
 	public void onDeviceConnected(Device device) {
 		
 		connectedDevices.remove(device.getDeviceId());
-		connectedDevices.add(device.getDeviceId());
+		connectedDevices.put(device.getDeviceId(), device.getDefinition().getId());
 		initDevice(device);
 
 	}
@@ -66,7 +69,7 @@ public abstract  class GenericIOTApplet implements IOTApplet {
 
 	@Override
 	public Collection<String> getRequiredDevices() {
-		return devices;
+		return devices.keySet();
 	}
 
 }

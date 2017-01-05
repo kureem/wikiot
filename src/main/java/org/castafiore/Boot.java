@@ -14,44 +14,32 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @SpringBootApplication
 @Configuration
 @EnableWebSocket
-public class Boot extends WebMvcConfigurerAdapter implements WebSocketConfigurer  {
-	
+public class Boot extends WebMvcConfigurerAdapter implements WebSocketConfigurer {
+
 	@Autowired
 	private CastafioreIOTProtocolHandler handler;
 
-	
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry.addHandler(handler, "/ws");
+		registry.addHandler(handler, "/ws").setAllowedOrigins("*");
 	}
-
-
-
-	
-
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		  //theHttpServletResponse.addHeader("Access-Control-Allow-Headers", "origin, content-type, accept, x-requested-with");
-	        //theHttpServletResponse.addHeader("Access-Control-Max-Age", "60"); 
-	        //theHttpServletResponse.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-	        //theHttpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
+		// theHttpServletResponse.addHeader("Access-Control-Allow-Headers",
+		// "origin, content-type, accept, x-requested-with");
+		// theHttpServletResponse.addHeader("Access-Control-Max-Age", "60");
+		// theHttpServletResponse.addHeader("Access-Control-Allow-Methods",
+		// "GET, POST, PUT, DELETE, OPTIONS");
+		// theHttpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
 		super.addCorsMappings(registry);
-		registry.addMapping("/**/**").allowedHeaders("origin", "content-type", "accept", "x-requested-with").allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-		.maxAge(60).allowedOrigins("*");
-		
-		
-		
+		registry.addMapping("/**/**").allowedHeaders("origin", "content-type", "accept", "x-requested-with")
+				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS").maxAge(31536000).allowedOrigins("*").allowCredentials(true);
+
 	}
-
-
-
-
-
 
 	public static void main(String[] args) {
 		SpringApplication.run(Boot.class, args);
 	}
-	
-	
+
 }

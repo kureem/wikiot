@@ -41,11 +41,11 @@ public class Device {
 	private DeviceDefinition definition;
 
 	protected static ObjectMapper mapper = new ObjectMapper();
-	
+
 	private WebSocketSession session;
-	
+
 	private Map<String, List<EventListener>> listeners = new LinkedHashMap<String, List<EventListener>>();
-	
+
 	private String deviceId;
 
 	/**
@@ -56,22 +56,10 @@ public class Device {
 	 *            - The device definition propagated by the physical device
 	 *            using the iot protocol over a websocket layer
 	 */
-	public Device(String deviceId,DeviceDefinition definition) {
+	public Device(String deviceId, DeviceDefinition definition) {
 		super();
 		this.definition = definition;
 		this.deviceId = deviceId;
-	}
-
-	/**
-	 * Returns the name of the device.<br>
-	 * Note that although the name is not universally unique, it should be
-	 * unique in the context it is being used<br>
-	 * The name is actually a human readable identifier of the the device
-	 * 
-	 * @return - The name of the device
-	 */
-	public String getName() {
-		return definition.getName();
 	}
 
 	/**
@@ -178,8 +166,7 @@ public class Device {
 	 * @param parameters
 	 *            - The parameters to send downstream
 	 */
-	public synchronized void invoke(String method,
-			Map<String, String> parameters) {
+	public synchronized void invoke(String method, Map<String, String> parameters) {
 		try {
 			DownStreamMessage response = new DownStreamMessage();
 			Execute execute = new Execute();

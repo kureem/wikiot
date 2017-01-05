@@ -16,68 +16,48 @@
 package org.castafiore.iot.definitions;
 
 public class DefinitionBuilder {
-	
-	
+
 	private DeviceDefinition def;
-	private DefinitionBuilder(DeviceDefinition definition){
+
+	private DefinitionBuilder(DeviceDefinition definition) {
 		this.def = definition;
 	}
-	public static DefinitionBuilder create(String definitionId, String groupId, String versionId){
+
+	public static DefinitionBuilder create(String definitionId) {
 		DeviceDefinition def = new DeviceDefinition();
-		def.setDefinitionId(definitionId);
-		def.setGroupId(groupId);
-		def.setVersionId(versionId);
+		def.setId(definitionId);
 		return new DefinitionBuilder(def);
 	}
-	
-	public DefinitionBuilder addEvent(String name, String description){
+
+	public DefinitionBuilder addEvent(String name, String description) {
 		EventDefinition evt = new EventDefinition();
 		evt.setDescription(description);
 		evt.setName(name);
-		def.getEvents().add(evt);
+		def.getEvts().add(evt);
 		return this;
 	}
-	
-	public DefinitionBuilder addFunction(String name, String description){
+
+	public DefinitionBuilder addFunction(String name, String description) {
 		FunctionDefinition func = new FunctionDefinition();
 		func.setDescription(description);
 		func.setName(name);
-		def.getFunctions().add(func);
-		return this;
-	}
-	
-	public DefinitionBuilder name(String name){
-		def.setName(name);
+		def.getFns().add(func);
 		return this;
 	}
 
-	/**
-	 * A human readable label
-	 */
-	public DefinitionBuilder label(String label){
-		def.setLabel(label);
-		return this;
-	}
-
-	/**
-	 * An icon representing the device.<br>
-	 * This should be a simple url accessible by the server
-	 */
-	public DefinitionBuilder icon(String icon){
-		def.setIcon(icon);
-		return this;
-	}
-	
 	/**
 	 * Arbitrary specifications set by the device.<br>
 	 * The specifications can be used to validate conformity
 	 */
-	public DefinitionBuilder specs(String label, String value){
-		def.getSpecs().put(label, value);
+	public DefinitionBuilder specs(String label, String value) {
+		Property p = new Property();
+		p.setName(label);
+		p.setValue(value);
+		def.getProps().add(p);
 		return this;
 	}
-	
-	public DeviceDefinition build(){
+
+	public DeviceDefinition build() {
 		return def;
 	}
 

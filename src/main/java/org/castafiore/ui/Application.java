@@ -21,8 +21,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.castafiore.ui.ex.EXApplication;
-
 /**
  * This interface defines an Application. The provided implementation is {@link EXApplication}. All applications created in Castafiore should extend {@link EXApplication}.
  * 
@@ -83,22 +81,6 @@ public interface Application extends Container  {
 	 */
 	public Set<String> getBufferedResources();
 	
-	/**
-	 * sets a cookie into the web application
-	 * it will overwrite existing one
-	 * @param name
-	 * @param value
-	 */
-	public void setCookie(String name, String value);
-	
-	
-	/**
-	 * returns a cookie
-	 * @param name
-	 * @param defaultValue
-	 * @return
-	 */
-	public String getCookie(String name, String defaultValue);
 	
 	
 	public String getSessionId();

@@ -47,6 +47,6 @@ public interface IOTApplet {
 	 * @param deviceName  The name of the device to add
 	 * @return  This iot applet
 	 */ 
-	public IOTApplet addRequiredDevice(String deviceId);
+	public IOTApplet addRequiredDevice(String deviceId, String definitionId);
 
 }

@@ -22,8 +22,8 @@ import java.util.Map;
 
 import org.castafiore.ui.Container;
 import org.castafiore.ui.Event;
+import org.castafiore.ui.dnd.AdvancedDraggableEvent;
 import org.castafiore.ui.dnd.Draggable;
-import org.castafiore.ui.dnd.events.AdvancedDraggableEvent;
 import org.springframework.stereotype.Component;
 /**
  * 

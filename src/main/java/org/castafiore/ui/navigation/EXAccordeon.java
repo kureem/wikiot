@@ -17,7 +17,7 @@
 package org.castafiore.ui.navigation;
 
 import org.castafiore.ui.Container;
-import org.castafiore.ui.ex.EXContainer;
+import org.castafiore.ui.EXContainer;
 
 public class EXAccordeon extends EXContainer implements TabPanel {
 	private static final long serialVersionUID = 1L;

@@ -1,7 +1,7 @@
 package org.castafiore;
 
 @SuppressWarnings("serial")
-public class SimpleKeyValueType extends SimpleKeyValuePair implements KeyValueType {
+public class SimpleKeyValueType extends SimpleKeyValue implements KeyValueType {
 
 	private Types type;
 
