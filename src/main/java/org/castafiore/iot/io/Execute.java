@@ -25,12 +25,6 @@ public class Execute{
 		this.parameters = parameters;
 	}
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+	
 
 }

@@ -1,6 +1,5 @@
-package org.castafiore;
+package org.castafiore.iot;
 
-import org.castafiore.iot.CastafioreIOTProtocolHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,12 +25,7 @@ public class Boot extends WebMvcConfigurerAdapter implements WebSocketConfigurer
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		// theHttpServletResponse.addHeader("Access-Control-Allow-Headers",
-		// "origin, content-type, accept, x-requested-with");
-		// theHttpServletResponse.addHeader("Access-Control-Max-Age", "60");
-		// theHttpServletResponse.addHeader("Access-Control-Allow-Methods",
-		// "GET, POST, PUT, DELETE, OPTIONS");
-		// theHttpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
+
 		super.addCorsMappings(registry);
 		registry.addMapping("/**/**").allowedHeaders("origin", "content-type", "accept", "x-requested-with")
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS").maxAge(31536000).allowedOrigins("*").allowCredentials(true);
