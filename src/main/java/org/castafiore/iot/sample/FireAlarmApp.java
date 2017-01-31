@@ -7,20 +7,20 @@ import org.castafiore.iot.EventListener;
 import org.castafiore.iot.websocket.GenericIOTApplet;
 import org.springframework.stereotype.Component;
 
-//@Component
-public class RemoteControlApplet extends GenericIOTApplet {
+@Component
+public class FireAlarmApp extends GenericIOTApplet {
 
-	public RemoteControlApplet(){
-		addRequiredDevice("ctr.0.0", "0");
-		addRequiredDevice("sw.0.0", "1");		
+	public FireAlarmApp(){
+		addRequiredDevice("al.0.0", "0");
+		addRequiredDevice("sn.0.0", "1");		
 	}
 
 	@Override
 	public void initDevice(Device device) {
 		//when device is first initialised, we add the listener for the 2 events on the remote control
-		if(device.getDeviceId().equals("0")){
-			device.addEvent(new OnSwitchOn(), "OnSwitchOn");
-			device.addEvent(new OnSwitchOff(), "OnSwitchOff");
+		if(device.getDeviceId().equals("1")){
+			device.addEvent(new OnCloseFire(), "OnCloseFire");
+			device.addEvent(new OnDistantFire(), "OnDistantFire");
 		}
 		
 	}
@@ -30,25 +30,25 @@ public class RemoteControlApplet extends GenericIOTApplet {
 	 * Implementation of the OnSwitchOn listener
 	 *
 	 */
-	class OnSwitchOn implements EventListener{
+	class OnCloseFire implements EventListener{
 
 		@Override
 		public void execute(Device source, String type,
 				Map<String, String> parameters) {
 			//finds the device and invoke the SwitchOn function
-			findDevice("1").invoke("SwitchOn");
+			findDevice("0").invoke("Danger");
 			
 		}
 		
 	}
 	
-	class OnSwitchOff implements EventListener{
+	class OnDistantFire implements EventListener{
 
 		@Override
 		public void execute(Device source, String type,	Map<String, String> parameters) {
 			
 			//finds the device and invokes the SwitchOff event
-			findDevice("1").invoke("SwitchOff");
+			findDevice("0").invoke("Warning");
 			
 		}
 		

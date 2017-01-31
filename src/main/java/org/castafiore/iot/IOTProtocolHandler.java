@@ -89,7 +89,7 @@ public abstract class IOTProtocolHandler extends TextWebSocketHandler {
 
 			} else if (type.equals(UpStreamMessage.IO)) {
 				OnEvent event = mapper.readValue(request.getBody(), OnEvent.class);
-				getRegistry().getDevice(deviceId).propageEvents(event.getName(), event.getParameters());
+				getRegistry().getDevice(deviceId).propageEvents(event.getName(), event.getParams());
 				logger.debug("Event propagated:{" + event.getName() + "," + deviceId + "}");
 			}
 
